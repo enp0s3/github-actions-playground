@@ -1,18 +1,19 @@
-name: Artifact
+name: Python pipeline
 
 on: [push]
 
-env:
-  ARTIFACT_NAME: myartifact
-  
 jobs:
-  main:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Cehckout the code
-        uses: actions/checkout@v2
-      - name: Upload the artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ env.ARTIFACT_NAME }}
-          path: .
+ test:
+   runs-on: ubuntu-latest
+   steps:
+    - uses: actions/checkout@v2
+    - run: python hello.py
+ build:
+   needs: [test]
+   runs-on: ubuntu-latest
+   steps:
+    - uses: actions/checkout@v2
+    - uses: actions/upload-artifact@v2
+      with:
+        name: hello
+        path: .
